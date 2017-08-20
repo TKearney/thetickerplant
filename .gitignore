@@ -1,3 +1,4 @@
 config.cfg
 kdbUserPass
-ttpApp/node_modules
+server/ttpApp/node_modules
+hdb*
