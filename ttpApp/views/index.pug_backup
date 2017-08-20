@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  script(src='/socket.io/socket.io.js')
+  script.
+    var socket = io();
+    //var socket = new io.Socket();
+    //var socket = io.connect('http://localhost:5002:username:password');
+    //socket.on('news', function(data){
+    //  console.log(data);
+    //  socket.emit('my other event', {my: 'data'});
+    //});
+    //socket.on('connect
+    //var socket = io.connect('ws://localhost:5002:username:password/');

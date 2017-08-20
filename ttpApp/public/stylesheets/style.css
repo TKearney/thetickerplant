@@ -1,0 +1,42 @@
+h2{
+  margin-left:2cm;
+}
+h4{
+  margin-left:3cm;
+}
+table{
+  border: 1px solid black;
+  width:700px;
+  margin-left:1cm;
+  padding=15px;
+}
+th,td{
+margin-left=1cm;
+padding=15px;
+border-bottom:1px solid #ddd;
+}
+th{background-color: #4CAF50;color: white;}
+tr:hover {background-color: #f5f5f5}
+    .navbar {
+      margin-bottom: 0;
+      border-radius: 0;
+    }
+    
+    /* Add a gray background color and some padding to the footer */
+    footer {
+      background-color: #f2f2f2;
+      padding: 25px;
+    }
+    
+  .carousel-inner img {
+      width: 100%; /* Set width to 100% */
+      margin: auto;
+      min-height:200px;
+  }
+
+  /* Hide the carousel text when the screen is less than 600 pixels wide */
+  @media (max-width: 600px) {
+    .carousel-caption {
+      display: none; 
+    }
+  }
