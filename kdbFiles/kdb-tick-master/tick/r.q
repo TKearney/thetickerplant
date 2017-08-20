@@ -3,8 +3,16 @@
 
 if[not "w"=first string .z.o;system "sleep 1"];
 
+//Websocket handles list
+wsHandles:`int$();
+.z.wo:{wsHandles::distinct wsHandles,.z.w};
+.z.wc:{wsHandles::wsHandles inter key .z.W};
+epochMillis:{floor((`long$.z.d+x)-`long$1970.01.01D00:00)%1e6};
+.z.ws:{neg[.z.w].j.j @[value;x;{`$x}];};
+getData:{update epochMillis time from -100 sublist metrics};
+
 //\cd ../hdb/;
-upd:insert;
+upd:{x insert y;{neg[x] .j.j update epochMillis time from -1 sublist metrics}each wsHandles};
 
 / get the ticker plant and history ports, defaults are 5010,5012
 .u.x:.z.x,(count .z.x)_(":5010";":5012");
