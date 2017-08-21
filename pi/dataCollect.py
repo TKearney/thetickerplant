@@ -41,20 +41,19 @@ def init():
 
 def publishToTp():
 	print "Getting Readings"
-	q.lux=K.short(lightSensors.readVisibleLux())
-	q.visIR=K.short(lightSensors.channel0)
-	q.IR=K.short(lightSensors.channel1)
+	q.lux=lightSensors.readVisibleLux()
+	q.visIR=lightSensors.channel0
+	q.IR=lightSensors.channel1
 	humidity, airTemp=Adafruit_DHT.read_retry(Adafruit_DHT.AM2302, 23)
 	q.UV=K.float(ads1256.read_channel(0)/(2**13))
 	q.UV=q('UV%20')
 	q.pH=K.float(ads1256.read_channel(2))
-	print q.pH
 	q.co2=K.short(mh_z19.read())
 	q.waterTemp=waterTemp.read_temp()
-	if humidity is not None and airTemp is not None:
-    		print('Air Temp={0:0.1f}*  Humidity={1:0.1f}%'.format(airTemp, humidity))
-	else:
-    		print('Failed to get reading...')
+	#if humidity is not None and airTemp is not None:
+    	#	print('Air Temp={0:0.1f}*  Humidity={1:0.1f}%'.format(airTemp, humidity))
+	#else:
+    	#	print('Failed to get reading...')
 	q.humidity=humidity
 	q.airTemp=airTemp
 	print "Sending to TP"
