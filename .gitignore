@@ -2,3 +2,4 @@ config.cfg
 kdbUserPass
 server/ttpApp/node_modules
 hdb*
+*.pem

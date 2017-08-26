@@ -24,6 +24,7 @@ def read():
 	s=ser.read(9)
 	print "read"
 	if s[0] == "\xff" and s[1] == "\x86":
-		print {'co2': ord(s[2])*256 + ord(s[3])}
-	return (ord(s[2])*256 + ord(s[3]))
+		#print {'co2': ord(s[2])*256 + ord(s[3])}
+		return (ord(s[2])*256 + ord(s[3]))
+	return 0
 #	return True
