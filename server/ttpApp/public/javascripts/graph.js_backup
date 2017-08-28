@@ -15,18 +15,21 @@ g = svg.append("g")
                
 var xScale = d3.scaleLinear()
 var yScale = d3.scaleLinear()
+var zScale = d3.scaleLinear()
         
 var xAxisCall = d3.axisBottom().tickFormat(d3.timeFormat("%H:%M:%S"))
 var yAxisCall = d3.axisLeft()
+var zAxisCall = d3.axisRight()
     
     
 
 function setScale1(data){
-//var xVals = [];
+var zVals = [];
 var yVals = [];
 for(var i=0;i<data.length;i++){
 //xVals.push(data[i].time);
 yVals.push(data[i].lux);
+zVals.push(data[i].humidity);
 }
 //console.log(xVals)
 //console.log(yVals)
@@ -46,7 +49,7 @@ function updateAxis(){
   svg.select(".y")
     .transition(t)
     .call(yAxisCall)
-        
+       
 }  
 
 function initAxis()
@@ -55,7 +58,6 @@ function initAxis()
   yScale.domain([0, 100]).range([height-(margin.top+margin.bottom), 0])
   xAxisCall.scale(xScale)
   yAxisCall.scale(yScale)
-
 
 //orig
   svg.append("g")
@@ -102,7 +104,7 @@ initAxis()
       .attr("stroke-linejoin", "round")
       .attr("stroke-linecap", "round")
       .attr("stroke-width", 1.5)
-//      .attr("d", line);
+      //.attr("d", line);
 
 //  g.append("g")
     //.call(d3.axisLeft(yScale))
@@ -157,7 +159,6 @@ updateAxis()
 g.select("path")
   .datum(data)
   .transition()
-    //.attr("transform", "translate("+x(-1) + ")")
     .attr("d", line);
 //  g.select("path")
 //      .datum(data)

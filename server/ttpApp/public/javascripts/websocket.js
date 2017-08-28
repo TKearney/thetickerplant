@@ -3,7 +3,7 @@ var ws,out=document.getElementById("out"),c=connect();
 var data=[];
 function connect()
 {if ("WebSocket" in window)
-{ws=new WebSocket("ws://username:password@thetickerplant.com:5002");
+{ws=new WebSocket("ws://username:password@thetickerplant.com:443");
 ws.binaryType="arraybuffer";
 out.value="connecting..." ;
 ws.onopen=function(e){out.value="connected";send('getData[]')};
@@ -26,7 +26,7 @@ data.splice(0,1);
 graphGen(data);
 //tableGen(d);
 tabulate(data, ['time', 'lux','IR','UV', 'humidity', 'airTemp','waterTemp','co2']);
-console.log(d);
+//console.log(d);
 //console.log(data);
 }
 }

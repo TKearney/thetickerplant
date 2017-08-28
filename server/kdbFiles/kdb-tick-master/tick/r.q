@@ -5,8 +5,8 @@ if[not "w"=first string .z.o;system "sleep 1"];
 
 //Websocket handles list
 wsHandles:`int$();
-.z.wo:{wsHandles::distinct wsHandles,.z.w};
-.z.wc:{wsHandles::wsHandles inter key .z.W};
+.z.wo:{wsHandles::distinct wsHandles,.z.w;`connectionLog insert (.z.n;.z.u;"." sv string "i"$0x0 vs .z.a;.z.w;0Nn)};
+.z.wc:{wsHandles::wsHandles inter key .z.W;update timeClosed:.z.n from `connectionLog where null timeClosed,handle=.z.w};
 epochMillis:{floor((`long$.z.d+x)-`long$1970.01.01D00:00)%1e6};
 .z.ws:{neg[.z.w].j.j @[value;x;{`$x}];};
 getData:{update epochMillis time from -100 sublist metrics};
