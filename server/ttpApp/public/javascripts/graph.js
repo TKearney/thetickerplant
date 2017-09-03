@@ -29,12 +29,12 @@ var yVals = [];
 for(var i=0;i<data.length;i++){
 //xVals.push(data[i].time);
 yVals.push(data[i].lux);
-zVals.push(data[i].humidity);
+zVals.push(data[i].IR);
 }
 //console.log(xVals)
 //console.log(yVals)
   xScale.domain([data[0]["time"], data[data.length-1]["time"]]).range([0, width-(margin.top+margin.bottom)])
-  yScale.domain([d3.min(yVals), d3.max(yVals)]).range([height-(margin.top+margin.bottom), 0])
+  yScale.domain([d3.min(yVals.concat(zVals)), d3.max(yVals.concat(zVals))]).range([height-(margin.top+margin.bottom), 0])
   xAxisCall.scale(xScale)
   yAxisCall.scale(yScale)    
 }
@@ -77,7 +77,7 @@ function initAxis()
       //.attr("y", 0 - margin.left)
       //.attr("dy", "0.71em")
       .attr("text-anchor", "middle")
-      .text("Lux");
+      .text("Brightness");
     g.append("text")
       .attr("fill", "#000")
       //.attr("transform", "rotate(90)")
@@ -86,6 +86,18 @@ function initAxis()
       //.attr("dy", "0.71em")
       .attr("text-anchor", "middle")
       .text("Time");
+    g.append("text")
+      .attr("fill", "#008000")
+      //.attr("transform", "translate("+[width-margin.left-margin.right, height/2]+")")
+      .attr("text-anchor", "start")
+      .attr("id", "luxText")
+      .text("Lux");
+    g.append("text")
+      .attr("fill", "#F00")
+      //.attr("transform", "translate("+[width-margin.left-margin.right, height/2]+")")
+      .attr("text-anchor", "start")
+      .attr("id", "IRtext")
+      .text("IR");
    
 }
 
@@ -94,16 +106,28 @@ var line = d3.line()
     .y(function(d) { return yScale(d.lux); }) // set the y values for the line generator 
     .curve(d3.curveMonotoneX) // apply smoothing to the line
 
+var line2 = d3.line()
+    .x(function(d) { return xScale(d.time); })
+    .y(function(d) { return yScale(d.IR); })
+
 //setScale1()
 initAxis()
 
   g.append("path")
       //.datum(data)
       .attr("fill", "none")
-      .attr("stroke", "red")
+      .attr("stroke", "green")
       .attr("stroke-linejoin", "round")
       .attr("stroke-linecap", "round")
       .attr("stroke-width", 1.5)
+      .attr("id", "line")
+  g.append("path")
+      .attr("fill", "none")
+      .attr("stroke", "red")
+      .attr("stroke-linejoin", "round")
+      .attr("stroke-linecap", "round")
+      .attr("strike-width", 1.5)
+      .attr("id", "line2")
       //.attr("d", line);
 
 //  g.append("g")
@@ -156,10 +180,26 @@ updateAxis()
 //      .attr("text-anchor", "end")
 //      .text("Lux");
 
-g.select("path")
+g.select("#line")
   .datum(data)
   .transition()
     .attr("d", line);
+
+g.select("#line2")
+  .datum(data)
+  .transition()
+    .attr("d", line2);
+
+g.select("#luxText")
+  .datum(data)
+  .attr("transform","translate("+[width-margin.left-margin.right+5, yScale(data[data.length -1].lux)]+")")
+  .attr("dy", ".35em")
+g.select("#IRtext")
+  .datum(data)
+  .attr("transform","translate("+[width-margin.left-margin.right+5, yScale(data[data.length -1].IR)]+")")
+  .attr("dy", ".35em")
+
+//    .attr("d", line2);
 //  g.select("path")
 //      .datum(data)
 //      .attr("fill", "none")
