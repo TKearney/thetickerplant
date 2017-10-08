@@ -6,5 +6,4 @@ eval ${q} tick.q log . -p ${piTPPort} &
 eval ${q} imageCapture.q -p ${piImagePort} &
 cd ../sensorCollect/
 echo starting pyq process
-eval pyq dataCollect.py &
-  
+eval pyq dataCollect.py & 
