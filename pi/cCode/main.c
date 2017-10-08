@@ -1,0 +1,96 @@
+
+#include "DHT/pi_2_dht_read.h"
+#include "tsl2561/tsl2561.h"
+#include <stdlib.h>
+#include <bcm2835.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <string.h>
+#include <math.h>
+#include <errno.h>
+//#include <wiringPi.h>
+#include <wiringSerial.h>
+
+
+//int tsl_add=0x29;
+//char *i2c_device = "/dev/i2c-1";
+//void *tsl = tsl2561_init(tsl_add, i2c_device);
+
+
+#define tsl_add 0x29
+char *i2c_device = "/dev/i2c-1";
+
+int mhz19_handle;
+char mhz19_cmd[9] = {0xFF,0x01,0x86,0x00,0x00,0x00,0x00,0x00,0x79};
+char mhz19_cmd2[9];
+
+void tsl_init(void *tsl){
+
+	tsl2561_enable_autogain(tsl);
+	tsl2561_set_integration_time(tsl, TSL2561_INTEGRATION_TIME_13MS);
+	if(tsl == NULL){//Check is error is present
+	exit(1);
+	}
+
+}
+
+void mh_z19_init(void){
+	if ((mhz19_handle = serialOpen ("/dev/ttyS0", 9600)) < 0) // uses wiringSerial
+	{
+		printf("Unable to open device");
+		return 1;
+	} else
+	{
+		printf("ttyS0 initialized ok\n");
+	}
+	printf("CO2 UART is running\n");
+	
+}
+
+int main(void){
+
+float hum, temp;
+int32_t adc[8];
+uint8_t i;
+void *tsl = tsl2561_init(tsl_add, i2c_device);
+int ch0, ch1;
+tsl_init(tsl);
+ads1256_init();
+mh_z19_init();
+for(i = 0; i<3;i++){
+	delay(2000);
+	write(mhz19_handle,mhz19_cmd,9);
+	read(mhz19_handle,mhz19_cmd2,9);
+	printf("mh z19 reading done\n");
+	int ppm = (256*((int) mhz19_cmd2[2]))+((int)mhz19_cmd2[3]);
+	printf("ppm = %i \n", ppm);
+}
+
+long lux;
+for(i = 0; i < 3; i++){
+	tsl2561_luminosity(tsl, &ch0, &ch1);
+	lux = tsl2561_compute_lux(tsl, ch0, ch1);
+	tsl2561_gain_normalize(tsl, &ch0, &ch1);
+	printf("lux %lu, ch0: %i, ch1: %i \r\n", lux, ch0, ch1);
+	usleep(3 * 100 * 1000);
+}
+
+
+//int32_t adc;
+
+ads1256_read(6, &adc);
+for (i=0; i<8; i++)
+{
+	printf("ADC %i is : %i\r\n",i, adc[i]);
+}
+
+pi_2_dht_read(22, 23, &hum, &temp);
+printf("humidity is: %f and temp is %f", hum, temp);
+
+ads1256_end();
+tsl2561_close(tsl);
+i2c_device = NULL;
+
+return 0;
+
+}
