@@ -1,5 +1,6 @@
 CC=gcc
-CFLAGS=-Wall -std=gnu99 
+#CFLAGS=-Wall -std=gnu99 -DKXVER=3
+CFLAGS=-std=gnu99
 DEPS=main.c 
 DHT_DEPS=DHT/pi_2_dht_read.c DHT/common_dht_read.c DHT/pi_2_mmio.c
 ADS_DEPS=ads1256/ads1256.c
