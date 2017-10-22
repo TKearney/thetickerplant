@@ -3,7 +3,7 @@ var thead = table.append('thead')
 var	tbody = table.append('tbody');
 // append the header row
 //dataSamp={"time":15234324,"lux":60}
-columns=['time','lux','IR','UV', 'humidity', 'airTemp','waterTemp','co2']
+columns=['time','lux','IR','UV', 'humidity', 'airTemp','waterTemp','co2','weight']
 //console.log(columns);
 thead.append('tr')
   .selectAll('th')

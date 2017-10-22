@@ -4,12 +4,18 @@ block content
   html
     body
       .container-fluid
-        svg#example1(width='100%',height=300)
+        form.form-inline#form1
+          .form-group
+            label(for='number') Lookback hours:
+            input#email.form-control(type='number', step='0.01')
+          button.btn.btn-default(type='submit') Submit
+        svg#light(width='100%',height=300)
+        svg#temp(width='100%',height=300)
         img(src='test.jpg', alt='thetickerplant', style='width:640px;height:480px;')       
         table#split
         thead
         tbody
       script(type='text/javascript', src='javascripts/websocket.js')
       script(type='text/javascript', src='javascripts/graph.js')
-      //script(type='text/javascript', src='javascripts/graphHumidity.js')
+      script(type='text/javascript', src='javascripts/graphTemp.js')
       script(type='text/javascript', src='javascripts/table.js')

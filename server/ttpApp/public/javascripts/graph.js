@@ -6,41 +6,45 @@
 var width = document.querySelector("svg").clientWidth
 //var width=960;
 var height = document.querySelector("svg").clientHeight
-var margin = {top:50, left:50, bottom:50, right:50 }
+var margin = {top:50, left:50, bottom:50, right:100 }
 
 var parseTime = d3.timeParse("%d-%b-%y");
-var svg = d3.select("#example1")
+var svg = d3.select("#light")
 g = svg.append("g")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
                
 var xScale = d3.scaleLinear()
-var yScale = d3.scaleLinear()
-var zScale = d3.scaleLinear()
+var y1Scale = d3.scaleLinear()
+var y2Scale = d3.scaleLinear()
         
-var xAxisCall = d3.axisBottom().tickFormat(d3.timeFormat("%H:%M:%S"))
-var yAxisCall = d3.axisLeft()
-var zAxisCall = d3.axisRight()
+var xAxisCall = d3.axisBottom().tickFormat(d3.timeFormat("%H:%M"))
+var y1AxisCall = d3.axisLeft()
+var y2AxisCall = d3.axisRight()
     
     
 
 function setScale1(data){
-var zVals = [];
-var yVals = [];
+var y1Vals = [];
+var y2Vals = [];
 for(var i=0;i<data.length;i++){
 //xVals.push(data[i].time);
-yVals.push(data[i].lux);
-zVals.push(data[i].IR);
+y1Vals.push(data[i].lux);
+y2Vals.push(data[i].IR);
 }
 //console.log(xVals)
 //console.log(yVals)
   xScale.domain([data[0]["time"], data[data.length-1]["time"]]).range([0, width-(margin.top+margin.bottom)])
-  yScale.domain([d3.min(yVals.concat(zVals)), d3.max(yVals.concat(zVals))]).range([height-(margin.top+margin.bottom), 0])
+//console.log(xScale(100.0))
+  y1Scale.domain(d3.extent(y1Vals)).range([height-(margin.top+margin.bottom), 0])
+  y2Scale.domain(d3.extent(y2Vals)).range([height-(margin.top+margin.bottom), 0])
   xAxisCall.scale(xScale)
-  yAxisCall.scale(yScale)    
+  y1AxisCall.scale(y1Scale)    
+  y2AxisCall.scale(y2Scale)    
 }
 function updateAxis(){
-  var t = d3.transition()
-   .duration(500)
+  var t = d3.transition();
+   //.attr("transform","translate("+xScale(-1) + ")");
+   //.duration(500);
         
   svg.select(".x")
     .transition(t)
@@ -48,16 +52,21 @@ function updateAxis(){
         
   svg.select(".y")
     .transition(t)
-    .call(yAxisCall)
+    .call(y1AxisCall)
        
+  svg.select(".y1")
+    .transition(t)
+    .call(y2AxisCall)
 }  
 
 function initAxis()
 {
   xScale.domain([Date.now()-50, Date.now()]).range([0, width-(margin.top+margin.bottom)])
-  yScale.domain([0, 100]).range([height-(margin.top+margin.bottom), 0])
+  y1Scale.domain([0, 100]).range([height-(margin.top+margin.bottom), 0])
+  y2Scale.domain([0, 100]).range([height-(margin.top+margin.bottom), 0])
   xAxisCall.scale(xScale)
-  yAxisCall.scale(yScale)
+  y1AxisCall.scale(y1Scale)
+  y2AxisCall.scale(y2Scale)
 
 //orig
   svg.append("g")
@@ -68,47 +77,37 @@ function initAxis()
   svg.append("g")
      .attr("class", "y axis")
      .attr("transform", "translate("+[margin.left, margin.top]+")")
-       .call(yAxisCall)
-    g.append("text")
-      .attr("fill", "#000")
-      //.attr("transform", "rotate(90)translate("+[width/2, height/2]+")")
-      //.attr("transform", "translate("+[0-margin.left, height/2]+"), rotate(-90)")
-      .attr("transform", "translate("+[-40, height/2-margin.top]+")rotate(-90)")
-      //.attr("y", 0 - margin.left)
-      //.attr("dy", "0.71em")
-      .attr("text-anchor", "middle")
-      .text("Brightness");
-    g.append("text")
-      .attr("fill", "#000")
-      //.attr("transform", "rotate(90)")
-      .attr("transform", "translate("+[width/2-margin.left, height-margin.bottom]+")")
-      //.attr("y", 0 - margin.left)
-      //.attr("dy", "0.71em")
-      .attr("text-anchor", "middle")
-      .text("Time");
+       .call(y1AxisCall);
+  svg.append("g")
+     .attr("class", "y1 axis")
+     .attr("transform", "translate("+[width-margin.left, margin.top]+")")
+       .call(y2AxisCall)
     g.append("text")
       .attr("fill", "#008000")
-      //.attr("transform", "translate("+[width-margin.left-margin.right, height/2]+")")
-      .attr("text-anchor", "start")
-      .attr("id", "luxText")
+      .attr("transform", "translate("+[-40, height/2-margin.top]+")rotate(-90)")
+      .attr("text-anchor", "middle")
       .text("Lux");
     g.append("text")
       .attr("fill", "#F00")
-      //.attr("transform", "translate("+[width-margin.left-margin.right, height/2]+")")
-      .attr("text-anchor", "start")
-      .attr("id", "IRtext")
+      .attr("transform", "translate("+[width-margin.left-10, height/2-margin.top]+")rotate(90)")
+      .attr("text-anchor", "middle")
       .text("IR");
+    g.append("text")
+      .attr("fill", "#000")
+      .attr("transform", "translate("+[width/2-margin.left, height-margin.bottom]+")")
+      .attr("text-anchor", "middle")
+      .text("Time");
    
 }
 
 var line = d3.line()
     .x(function(d) { return xScale(d.time); }) // set the x values for the line generator
-    .y(function(d) { return yScale(d.lux); }) // set the y values for the line generator 
-    .curve(d3.curveMonotoneX) // apply smoothing to the line
+    .y(function(d) { return y1Scale(d.lux); }) // set the y values for the line generator 
+    //.curve(d3.curveMonotoneX) // apply smoothing to the line
 
 var line2 = d3.line()
     .x(function(d) { return xScale(d.time); })
-    .y(function(d) { return yScale(d.IR); })
+    .y(function(d) { return y2Scale(d.IR); })
 
 //setScale1()
 initAxis()
@@ -119,7 +118,7 @@ initAxis()
       .attr("stroke", "green")
       .attr("stroke-linejoin", "round")
       .attr("stroke-linecap", "round")
-      .attr("stroke-width", 1.5)
+      .attr("stroke-width", 1)
       .attr("id", "line")
   g.append("path")
       .attr("fill", "none")
@@ -170,34 +169,41 @@ updateAxis()
       
 
   g.select("g")
-      .call(d3.axisLeft(yScale))
-//    .append("text")
-//      .attr("fill", "#000")
-      //.attr("transform", "translate("+[width/2, height/2]+")", "rotate(-90)")
-      //.attr("transform", "rotate(-90)")
-      //.attr("y", 6)
-      //.attr("dy", "0.71em")
-//      .attr("text-anchor", "end")
-//      .text("Lux");
+      .call(d3.axisLeft(y1Scale));
+  g.select("g")
+      .call(d3.axisRight(y2Scale));
 
 g.select("#line")
   .datum(data)
   .transition()
     .attr("d", line);
 
+//g.select("#line2")
+//  .transition()
+//    .attr("transform", "translate("+ xScale(-1) + ")");
+//g.select("#line2")
+  //.datum(data)
+  //.transition()
+    //.attr("d", line2);
+    //.attr({"d": line2});
 g.select("#line2")
   .datum(data)
   .transition()
-    .attr("d", line2);
+    .attr("d",line2);
+//g.select("#line2")
+//  .datum(data)
+//  .transition()
+//.attrTween("transform", function() {
+//  return function(t) {
+//    return "translate(" + [-((width-margin.left-margin.right)/data.length)*t,0]+")";
+//  };
+//})
+//  .attr("d", line2)
+//    .on("start",tick);
+//g.active("#line2")
+//  .attr("transform","translate(" + xScale(-1) + ",0)")
+//  .transition()
 
-g.select("#luxText")
-  .datum(data)
-  .attr("transform","translate("+[width-margin.left-margin.right+5, yScale(data[data.length -1].lux)]+")")
-  .attr("dy", ".35em")
-g.select("#IRtext")
-  .datum(data)
-  .attr("transform","translate("+[width-margin.left-margin.right+5, yScale(data[data.length -1].IR)]+")")
-  .attr("dy", ".35em")
 
 //    .attr("d", line2);
 //  g.select("path")
