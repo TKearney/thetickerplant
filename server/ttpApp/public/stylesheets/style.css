@@ -1,3 +1,27 @@
+body {
+  background-color:#564256;
+  color:#A5BE00;
+}
+
+.jumbotron {
+  background-color:#D0E3C4;
+  color:#564256;
+}
+.x.axis text{
+//fill:black;
+ fill:#A5BE00;
+}
+.x.axis line{
+//stroke:black;
+ stroke:#A5BE00;
+}
+.y.axis text{
+ fill:#A5BE00;
+}
+svg text{
+ //fill:white;
+ fill:#A5BE00;
+}
 h2{
   margin-left:2cm;
 }
@@ -15,18 +39,19 @@ margin-left=1cm;
 padding=15px;
 border-bottom:1px solid #ddd;
 }
-th{background-color: #4CAF50;color: white;}
+th{background-color: #679436;color: #D0E3C4;}
 tr:hover {background-color: #f5f5f5}
     .navbar {
       margin-bottom: 0;
       border-radius: 0;
     }
     
-    /* Add a gray background color and some padding to the footer */
-    footer {
-      background-color: #f2f2f2;
-      padding: 25px;
-    }
+/* Add a gray background color and some padding to the footer */
+footer {
+  background-color: #D0E3C4;
+  padding: 25px;
+  color:#564256;
+}
     
   .carousel-inner img {
       width: 100%; /* Set width to 100% */
@@ -40,3 +65,60 @@ tr:hover {background-color: #f5f5f5}
       display: none; 
     }
   }
+
+.cover {
+position: fixed; 
+height: 100%; 
+width: 100%; 
+top:0; 
+left: 0; 
+background: #564256; 
+//z-index:9999;
+}
+
+
+.loader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  width: 150px;
+  height: 150px;
+  margin: -75px 0 0 -75px;
+  border: 16px solid #A5BE00;
+  border-radius: 50%;
+  border-top: 16px solid #FC814A;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Add animation to "page content" */
+.animate-bottom {
+  position: relative;
+  -webkit-animation-name: animatebottom;
+  -webkit-animation-duration: 1s;
+  animation-name: animatebottom;
+  animation-duration: 1s
+}
+
+@-webkit-keyframes animatebottom {
+  from { bottom:-100px; opacity:0 } 
+  to { bottom:0px; opacity:1 }
+}
+
+@keyframes animatebottom { 
+  from{ bottom:-100px; opacity:0 } 
+  to{ bottom:0; opacity:1 }
+}

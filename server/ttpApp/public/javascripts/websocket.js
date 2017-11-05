@@ -6,7 +6,7 @@ function connect()
 {ws=new WebSocket('ws://thetickerplant.com:443');
 ws.binaryType="arraybuffer";
 out.value="connecting..." ;
-ws.onopen=function(e){console.log("Connected");out.value="connected";send('1')};
+ws.onopen=function(e){console.log("Connected");out.value="connected";send('1');connected()};
 ws.onclose=function(e){out.value="disconnected";};
 ws.onmessage=function(e){
 //console.log(e.data);
@@ -22,14 +22,14 @@ for (var i = 0; i < d.length; i++) {
 }
 data = data.concat(d);
 //data.pop();
-console.log(data.length);
+//console.log(data.length);
 data.splice(0,1);
 graphGen(data);
 graphGenTemp(data);
 //tableGen(d);
 tabulate(data, ['time', 'lux','IR','UV', 'humidity', 'airTemp','waterTemp','co2','pH', 'weight']);
 //console.log(d);
-console.log(data);
+//console.log(data);
 }
 }
 };

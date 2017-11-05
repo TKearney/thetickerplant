@@ -1,8 +1,11 @@
 extends layout
-
 block content
   html
+    //body(onload='myFunction()', style='margin:0;')
     body
+      .cover#cover
+      .loader#loader
+      .myDiv.animate-bottom(style='display:none;')
       .container-fluid
         form.form-inline#form1
           .form-group
@@ -15,6 +18,7 @@ block content
         table#split
         thead
         tbody
+      script(type='text/javascript', src='javascripts/load.js')
       script(type='text/javascript', src='javascripts/websocket.js')
       script(type='text/javascript', src='javascripts/graph.js')
       script(type='text/javascript', src='javascripts/graphTemp.js')
