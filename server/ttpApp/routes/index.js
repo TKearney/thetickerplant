@@ -6,4 +6,10 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+/* GET archi page. */
+router.get('/archi', function(req, res, next) {
+  res.render('archi', { title: 'Express' });
+});
+
+
 module.exports = router;

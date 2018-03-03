@@ -1,0 +1,15 @@
+extends layout
+block content
+  html
+    //body(onload='myFunction()', style='margin:0;')
+    body
+      //.cover#cover
+      //.loader#loader
+      //.myDiv.animate-bottom(style='display:none;')
+      a(href="/")
+       button(type="button") Home
+      .container-fluid
+        object(type='image/svg+xml', data='/images/archi.svg')
+          | Your browser does not support SVG
+        thead
+        tbody
