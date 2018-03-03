@@ -1,15 +1,27 @@
 extends layout
-
 block content
   html
+    //body(onload='myFunction()', style='margin:0;')
     body
+      .cover#cover
+      .loader#loader
+      .myDiv.animate-bottom(style='display:none;')
       .container-fluid
-        svg#example1(width='100%',height=300)
-        img(src='test.jpg', alt='thetickerplant', style='width:640px;height:480px;')       
+        a(href="archi")
+         button(type="button") Architecture
+        form.form-inline#form1
+          .form-group
+            label(for='number') Lookback hours:
+            input#email.form-control(type='number', step='0.01')
+          button.btn.btn-default(type='submit') Submit
+        svg#light(width='100%',height=300)
+        svg#temp(width='100%',height=300)
+        img(src='test.jpg', class='img-responsive', alt='thetickerplant')
         table#split
         thead
         tbody
+      script(type='text/javascript', src='javascripts/load.js')
       script(type='text/javascript', src='javascripts/websocket.js')
       script(type='text/javascript', src='javascripts/graph.js')
-      //script(type='text/javascript', src='javascripts/graphHumidity.js')
+      script(type='text/javascript', src='javascripts/graphTemp.js')
       script(type='text/javascript', src='javascripts/table.js')
