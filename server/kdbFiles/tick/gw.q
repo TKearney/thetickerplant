@@ -29,7 +29,7 @@ hdbHandle(set;`epochMillis;epochMillis);
 getData:{`time xasc uj[hdbHandle(queryHDBStandard;x);rdbHandle(queryRDBStandard;x)]};
 
 /cd ../hdb/;
-upd:{[x;y]{neg[y]"\n",last csv 0: update epochMillis time+.z.d,date:.z.d from `x}[y;]each wsHandles};
+upd:{[x;y]{neg[y]last csv 0: update epochMillis time+.z.d,sym:` from x}[y;]each wsHandles};
 
 
 
