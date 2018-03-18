@@ -21,7 +21,7 @@
 //char *i2c_device = "/dev/i2c-1";
 //void *tsl = tsl2561_init(tsl_add, i2c_device);
 
-#define PORT "5001" /* the port client will be connecting to */
+#define PORT "5003" /* the port client will be connecting to */
 #define MAXDATASIZE 100 /* max number of bytes we can get at once */
 
 #define tsl_add 0x29
@@ -30,10 +30,12 @@ char *i2c_device = "/dev/i2c-1";
 int mhz19_handle;
 char mhz19_cmd[9] = {0xFF,0x01,0x86,0x00,0x00,0x00,0x00,0x00,0x79};
 char mhz19_cmd2[9];
-	float hum, airTemp;
-	int32_t adc[8];
-	int ch0, IR,ppm;
-	long lux;
+float hum,humPrev, airTemp,airTempPrev;
+int32_t adc[8];
+int ch0, IR,ppm;
+long lux;
+//humPrev=-1.0;
+//airTempPrev=-1.0;
 
 
 //Socket inits:
@@ -154,10 +156,10 @@ int sendData(){
         src += 2;
 	}
 
-	for (dst = buffer; dst < end; dst++){
-		printf("%d: %c (%d, 0x%02x)\n", dst - buffer,
-			(isprint(*dst) ? *dst : '.'), *dst, *dst);	
-	}
+	//for (dst = buffer; dst < end; dst++){
+		//printf("%d: %c (%d, 0x%02x)\n", dst - buffer,
+		//	(isprint(*dst) ? *dst : '.'), *dst, *dst);	
+	//}
     //{0x01, 0x00, 0x00, 0x00, 0x23, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x0a, 0x00, 0x03, 0x00, 0x00, 0x00, 0x73, 0x65, 0x74, 0xf5, 0x61, 0x00, 0xf9, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
     //char test[] = {0x01, 0x00, 0x00, 0x00, 0x23, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x0a, 0x00, 0x03, 0x00, 0x00, 0x00, 0x73, 0x65, 0x74, 0xf5, 0x61, 0x00, 0xf9, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 	//char test[] = {0x01,0x00,0x00,0x00,0x43,0x00,0x00,0x00,0x00,0x00,0x03,0x00,0x00,0x00,0xf5,0x2e,0x75,0x2e,0x75,0x70,0x64,0x00,0xf5,0x74,0x61,0x62,0x00,0x00,0x00,0x04,0x00,0x00,0x00,0xf5,0x63,0x68,0x69,0x6c,0x69,0x00,0xf0,0xd8,0x0c,0xe2,0xa6,0x32,0x2d,0x00,0x00,0xf9,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xf7,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
@@ -186,11 +188,24 @@ int sendData(){
 	Ki=4;
 	Kf=8;
 	Ks=2;
-	
-	double humidity=hum;
+	double humidity,air;	
+	if(hum==0.0){
+		humidity=humPrev;
+	}
+	else{
+		humidity=hum;
+		humPrev=hum;
+	}
+	if(airTemp==0.0){
+		air=airTempPrev;
+	}
+	else{
+		air=airTemp;
+		airTempPrev=air;
+	}	
 	char humByte[sizeof(double)];
 	memcpy(humByte, &humidity, sizeof(double));
-	double air=airTemp;
+	//double air=airTemp;
 	char airByte[sizeof(double)];
 	memcpy(airByte, &air, sizeof(double));
 	
@@ -200,30 +215,30 @@ int sendData(){
 	//p*=lux;
 	for (i=0;i<Ki;i++){
 		buffer[lux_pos+i] = (int)((lux >> 8*i) & 0xFF) ;
-		printf("luxByte = %d, 0x%02x \r\n", buffer[lux_pos+i]);
+		//printf("luxByte = %d, 0x%02x \r\n", buffer[lux_pos+i]);
 	}
 	
 	for (i=0;i<Ki;i++){
 		buffer[IR_pos+i] = (int)((IR >> 8*i) & 0xFF) ;
-		printf("IR = %d \r\n", buffer[IR_pos+i]);
+		//printf("IR = %d \r\n", buffer[IR_pos+i]);
 	}
 	for (i=0;i<Kf;i++){
 		//buffer[humidity_pos+i] = (int)((((long)humidity) >> 8*i) & 0xFF) ;
 		buffer[humidity_pos+i] = (int)humByte[i];
-		printf("humidity = %d \r\n", buffer[humidity_pos+i]);
+		//printf("humidity = %d \r\n", buffer[humidity_pos+i]);
 	}
 	for (i=0;i<Kf;i++){
 	//	buffer[airTemp_pos+i] = (int)((((int32_t)airTemp) >> 8*i) & 0xFF) ;
 		buffer[airTemp_pos+i] = (int)airByte[i];
-		printf("airTemp = %d \r\n", buffer[airTemp_pos+i]);
+		//printf("airTemp = %d \r\n", buffer[airTemp_pos+i]);
 	}
 	for (i=0;i<Ks;i++){
 		buffer[co2_pos+i] = (int)((ppm >> 8*i) & 0xFF) ;
-		printf("co2 = %d \r\n", buffer[co2_pos+i]);
+		//printf("co2 = %d \r\n", buffer[co2_pos+i]);
 	}
-	for (i=0;i<sizeof(buffer);i++){
-		printf("buff = %d: %c (%d, 0x%02x)\n", buffer[i]);
-	}
+	//for (i=0;i<sizeof(buffer);i++){
+	//	printf("buff = %d: %c (%d, 0x%02x)\n", buffer[i]);
+	//}
         //if (send(sockfd, test, sizeof(test), 0) == -1)
         if (send(sockfd, buffer, sizeof(buffer), 0) == -1)
                 perror("send");
@@ -273,9 +288,9 @@ int main(void){
 	tsl_init(tsl);
 	ads1256_init();
 	mh_z19_init();
-	//delay(2000);
+	delay(2000);
 	while(1){
-		delay(2000);
+		//delay(10);
 		write(mhz19_handle,mhz19_cmd,9);
 		read(mhz19_handle,mhz19_cmd2,9);
 		printf("mh z19 reading done\n");
@@ -286,19 +301,23 @@ int main(void){
 		lux = tsl2561_compute_lux(tsl, ch0, IR);
 		tsl2561_gain_normalize(tsl, &ch0, &IR);
 		printf("lux %lu, ch0: %i, IR: %i \r\n", lux, ch0, IR);
-		usleep(3 * 100 * 1000);
+		//usleep(3 * 100 * 1000);
+		//usleep(3 * 1000);
 
 
 		//int32_t adc;
 
 		ads1256_read(6, &adc);
-		for (i=0; i<8; i++)
-		{
-			printf("ADC %i is : %i\r\n",i, adc[i]);
-		}
+		//for (i=0; i<8; i++)
+		//{
+		//	printf("ADC %i is : %i\r\n",i, adc[i]);
+		//}
 
 		pi_2_dht_read(22, 23, &hum, &airTemp);
 		printf("humidity is: %f and temp is %f", hum, airTemp);
+		if(airTemp==0.0){
+			printf("AirTemp is zero....");
+		}
 		sendData();
 	}
 

@@ -915,7 +915,7 @@ for (i = 0; i < ch_num; i++)
 {
 while((ADS1256_Scan() == 0));
 	adc[i]=ADS1256_GetAdc(i);
-	printf("adc %i reading is: %i \r\n", i, adc[i]);
+	//printf("adc %i reading is: %i \r\n", i, adc[i]);
 	bsp_DelayUS(100000);	
 
 }
