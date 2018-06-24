@@ -27,7 +27,7 @@ done
 case $1 in 
  "tick" ) f $1 "tick.q hdb ../ -p $TP_PORT -U $KDB_PERM_FILE ";w 5010 ;;
  "rdb" ) f $1 "tick/r.q :${TP_PORT}:${USER}:${PASS} :$HDB_PORT $HDB_DIR -p $RDB_PORT" ;;
- "hdb" ) f $1 "tick/hdb.q -p $HDB_PORT" ;;
+ "hdb" ) f $1 "tick/hdb.q -p $HDB_PORT $HDB_DIR" ;;
  "gw" ) f $1 "tick/gw.q :${TP_PORT}:${USER}:${PASS} :${RDB_PORT}:${USER}:${PASS} :$HDB_PORT -p $GW_PORT" ;;
 # "vwap" ) f $1 "$D/cx.q $1 -p 5017 -t 1000" ;;
 # "show" ) f $1 "$D/cx.q $1" ;;

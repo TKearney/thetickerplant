@@ -35,6 +35,7 @@ upd:{[x;y]{neg[y]last csv 0: update epochMillis time+.z.d,sym:` from x}[y;]each 
 
 / end of day: save, clear, hdb reload
 /.u.end:{t:tables`.;t@:where `g=attr each t@\:`sym;.Q.hdpf[`$":",.u.x 1;`:.;x;`sym];@[;`sym;`g#] each t;};
+.u.end:{-1".u.end called...";0N!x};
 
 / init schema and sync up from log file;cd to hdb(so client save can run)
 .u.schemas:{(.[;();:;].)each x};

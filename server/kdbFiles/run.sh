@@ -38,7 +38,7 @@ elif [ $1 == "STOP" ]; then
 		do
 			if [ -e pid/${f}.pid ]; then
 				echo "Killing process ${f}." 1>&2;
-				pkill pid/${f}.pid
+				pkill -F pid/${f}.pid
 				rm pid/${f}.pid
 			fi
 		done;
@@ -46,7 +46,7 @@ elif [ $1 == "STOP" ]; then
 		if [[ -e pid/${2}.pid ]]; then
 			echo "Killing process ${2}"
 			pkill -F pid/${2}.pid
-			rm pid/${2}.pid
+			#rm pid/${2}.pid
 		fi
 	fi
 elif [ $1 == "TEST" ]; then
